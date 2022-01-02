@@ -70,12 +70,24 @@
       </div>
       <button
           @click="generateUser"
-          class="border-2 bg-green-600 text-white p-2 rounded-md"
+          class="bg-green-600 text-white p-2 rounded-md"
           type="submit"
       >
         Submit
       </button>
     </div>
+
+    <div class="mt-5">
+
+      <input type="search" name="search" id="search" class="border-2 border-grey-500 rounded-md mr-2 p-1"
+             v-model="searchQuery" placeholder="Search ...">
+      <button @click="searchUserList"
+              class="bg-purple-500 text-white p-1.5 rounded-md"
+      >
+        search
+      </button>
+    </div>
+
     <div class="mt-10">
       <Table :userList="userList" @changeAge="handleChangeAge" @deleteRecord="deleteRecord" v-if="userList.length"></Table>
     </div>
@@ -120,6 +132,8 @@ export default {
         age: "",
       },
 
+      searchQuery:"",
+
       userList: [],
 
       nameError: false,
@@ -150,6 +164,11 @@ export default {
           evt : 'alert' ,
           color: 'green',
         },
+        {
+          label : 'btn4',
+          evt : 'alert' ,
+          color: 'yellow',
+        },
       ],
 
       modalSizes : {
@@ -170,6 +189,38 @@ export default {
   },
 
   methods: {
+
+    searchUserList(){
+
+      let filteredArr = this.userList.filter(
+          (item) => {
+            let itemArr = Object.values(item);
+            console.log(itemArr);
+
+            let vvv = itemArr.filter(key => {
+              return key.toLowerCase().indexOf(this.searchQuery) != -1;
+            })
+
+            if (vvv.length) {
+              return true;
+            }
+
+      //     console.log(vvv)
+      //     console.log(itemArr.includes(vvv))
+      // return itemArr.includes(vvv);
+
+
+
+      // return item.name.toLowerCase().indexOf(this.searchQuery) != -1 ||
+      //     item.email.toLowerCase().indexOf(this.searchQuery) != -1 ||
+      //     item.lastname.toLowerCase().indexOf(this.searchQuery) != -1 ||
+      //     item.country.toLowerCase().indexOf(this.searchQuery) != -1 ||
+      //     item.age.toLowerCase().indexOf(this.searchQuery) != -1 ;
+    });
+
+      console.log(filteredArr);
+      this.userList = filteredArr;
+    },
 
     nameValidation(){
 
@@ -260,7 +311,7 @@ export default {
     },
 
     Alert(){
-      alert('fuck u')
+      alert('salaaaam')
     },
 
     mounted() {
