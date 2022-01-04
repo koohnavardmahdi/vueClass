@@ -92,7 +92,7 @@
       <Table :userList="userList" @changeAge="handleChangeAge" @deleteRecord="deleteRecord" v-if="userList.length"></Table>
     </div>
 
-    <Modal :title="myTitle" :buttons="buttons" :modalSizes="modalSizes" @alert="Alert">
+    <Modal :heading="myHeading" :title="title" :buttons="buttons" :eventColors="eventColors" :inputs="inputs" :modalSizes="modalSizes" @alert="Alert">
         this is not a body text
     </Modal>
 
@@ -146,7 +146,53 @@ export default {
       activeIndex: null,
       editMode: false,
 
-      myTitle:'Modal title',
+      myHeading:'Create an Event',
+      title:'',
+
+      inputs: [
+        {
+          label: "Date",
+          inputType: "date",
+          width: "w-full",
+        },
+        {
+          label: "Start",
+          inputType: "time",
+          width: "w-full",
+        },
+        {
+          label: "End",
+          inputType: "time",
+          width: "w-full",
+        },
+      ],
+
+      eventColors : [
+        {
+          color : 'red-500',
+          id : 1,
+        },
+        {
+          color : 'pink-500',
+          id : 2,
+        },
+        {
+          color : 'yellow-500',
+          id : 3,
+        },
+        {
+          color : 'green-500',
+          id : 4,
+        },
+        {
+          color : 'blue-500',
+          id : 5,
+        },
+        {
+          color : 'purple-500',
+          id : 6,
+        },
+      ],
 
       buttons : [
         {
@@ -252,13 +298,27 @@ export default {
       return this.emailError;
     },
 
+    checkDuplicate() {
+
+      let formDataArr = Object.values(this.formData);
+
+      for (const item in this.userList) {
+        let userListItems = Object.values(item);
+        for (let i = 0; i < formDataArr.length; i++) {
+          if (!formDataArr[i].includes(userListItems[i])) {
+            return true
+          }
+        }
+      }
+    },
+
     generateUser() {
       this.nameValidation();
       this.lastnameValidation();
       this.ageValidation();
       this.countryValidation();
       this.emailValidation();
-
+      this.checkDuplicate();
       this.isDestroyed = !this.isDestroyed;
 
       if (!(this.nameValidation() || this.lastnameValidation() || this.ageValidation() || this.countryValidation() || this.emailValidation())){
@@ -278,15 +338,17 @@ export default {
             };
             this.activeIndex = null
 
-          }else {
-            this.userList.push(this.formData);
-            this.formData = {
-              name: "",
-              email: "",
-              lastname: "",
-              country: "",
-              age: "",
-            };
+          }
+          else {
+              this.userList.push(this.formData);
+              this.formData = {
+                name: "",
+                email: "",
+                lastname: "",
+                country: "",
+                age: "",
+              };
+
           }
 
       }
